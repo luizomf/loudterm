@@ -2,6 +2,6 @@
 
 But first, let's just start the project.
 
-![loudterm](./assets/loudterm-logo.png)
+![loudterm](./assets/loudterm-logo-medium.png)
 
 ---
