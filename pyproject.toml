@@ -1,0 +1,79 @@
+[project]
+name = "loudterm"
+version = "0.0.1"
+description = "A universal TTS playground for your terminal."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Luiz Otávio Miranda" }]
+requires-python = ">=3.13"
+dependencies = ["python-dotenv>=1.1.0"]
+
+[dependency-groups]
+dev = ["pyright>=1.1.407", "pytest>=8.4.2", "ruff>=0.14.6", "watchdog>=6.0.0"]
+
+[project.urls]
+Homepage = "https://www.otaviomiranda.com.br/"
+Documentation = "https://github.com/luizomf/loudterm"
+Repository = "https://github.com/luizomf/loudterm"
+Issues = "https://github.com/luizomf/loudterm/issues"
+
+[project.scripts]
+loudterm = "loudterm.cli:main"
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+fix = true
+show-fixes = true
+indent-width = 4
+exclude = ["venv", ".venv", "env", ".env", "node_modules", "__pycache__"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ['D', 'T201']
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["ANN201", "S101"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.ruff.lint.isort]
+known-first-party = ["loudterm"]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+pythonVersion = "3.13"
+include = ["src", 'tests']
+exclude = [
+  "**/venv",
+  "**/.venv",
+  "**/env",
+  "**/.env",
+  "**/node_modules",
+  "**/__pycache__",
+]
+venv = ".venv"
+venvPath = "."
+executionEnvironments = [{ root = "src" }]
+useLibraryCodeForTypes = true
+reportMissingImports = true
+reportMissingTypeStubs = false
+
+[tool.pytest.ini_options]
+addopts = "-s --color=yes --tb=short"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
