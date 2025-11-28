@@ -1,27 +1,34 @@
+# ruff: noqa: SIM102
 import asyncio
-import builtins
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
-from prompt_toolkit import HTML, PromptSession
+from prompt_toolkit import PromptSession, print_formatted_text
+from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit.patch_stdout import patch_stdout
+from prompt_toolkit.shortcuts import clear
 
 from loudterm.audio.player import AudioPlayer
 from loudterm.audio.writer import AudioWriter
 from loudterm.backend.kokoro import KokoroGenerator
+from loudterm.backend.kokoro_voices import VOICES
 from loudterm.config import AppConfig
 from loudterm.core import AudioResult
-from loudterm.ui.completer import VOICES, LoudTermCompleter
+from loudterm.ui.completer import LoudTermCompleter
 from loudterm.ui.logo import build_logo
-from loudterm.ui.styles import Styles
+from loudterm.ui.prints import (
+    print_dim,
+    print_error,
+    print_info,
+    print_primary,
+    print_success,
+    print_text,
+)
+from loudterm.ui.styles import STYLES
 
 logger = logging.getLogger(__name__)
-
-
-def print(*values: object) -> None:  # noqa: A001
-    builtins.print(Styles.dim, *values, Styles.reset, sep="")
 
 
 def blocking_pipeline(
@@ -40,7 +47,7 @@ def blocking_pipeline(
     full_audio_chunks: list[np.ndarray] = []
     sample_rate = 24000  # Kokoro default
 
-    print(f"Processing {len(text)} chars...")
+    print_info(f"Processing {len(text)} chars...")
 
     # Use Kokoro's internal generator which handles splitting
     try:
@@ -51,17 +58,18 @@ def blocking_pipeline(
         )
 
         for i, audio_result in enumerate(audio_stream):
-            print(f"  [Chunk {i + 1}] Playing...")
+            print_info(f"> [Chunk {i + 1}] Playing...")
 
             # Play Stream
             player.play(audio_result)
 
             # Accumulate for saving
             full_audio_chunks.append(audio_result.samples)
+        print()
 
     except Exception:
         logger.exception("Error during generation")
-        print("Error during generation. Check logs for details.")
+        print_error("Error during generation. Check logs for details.\n")
         return
 
     # Save Final Result
@@ -72,9 +80,9 @@ def blocking_pipeline(
         filename = f"output_{int(time.time())}.wav"
         output_path = config.output_dir / filename
 
-        print(f"Saving to {output_path}...")
+        print_success(f"Saving to {output_path}...")
         writer.save(final_result, output_path)
-        print("Done.")
+        print_success("Done.\n")
 
 
 async def process_input(
@@ -93,22 +101,28 @@ async def process_input(
 
 async def run_repl(config: AppConfig) -> None:
     """Runs the main REPL loop."""
-    print(build_logo())
-    print("Initializing Kokoro engine (this may take a moment to download weights)...")
+    clear()
+    print(build_logo(), end="", flush=True)
+    print_dim(
+        "Initializing Kokoro engine (this may take a moment to download weights)...",
+    )
+    print()
 
     # Initialize Kokoro once
     try:
         # Map config lang to Kokoro lang code if needed, defaulting to 'a' (en-us)
         lang_code = config.lang if config.lang else "a"
         generator = KokoroGenerator(lang_code=lang_code)
-        print("Engine ready!")
+        print_success("Engine ready!\n")
     except Exception as e:  # noqa: BLE001
-        print(f"Failed to initialize Kokoro engine: {e}")
+        print_error(f"Failed to initialize Kokoro engine: {e}\n")
         return
 
-    print("\nType your text and press [Meta+Enter] or [Esc] then [Enter] to submit.")
-    print("Commands: Type '@' to see options for voice/language.")
-    print("Press [Ctrl+C] or /exit [Meta+Enter] to exit.\n")
+    print_primary(
+        "Type your text and press [Meta+Enter] or [Esc] then [Enter] to submit.",
+    )
+    print_dim("Commands: Type '@' to see options for voice/language.")
+    print_text("Press [Ctrl+C] or /exit [Meta+Enter] to exit.\n")
 
     session: PromptSession[str] = PromptSession(
         completer=LoudTermCompleter(),
@@ -122,60 +136,70 @@ async def run_repl(config: AppConfig) -> None:
         while True:
             try:
                 with patch_stdout():
+                    primary_clr_hex = STYLES.get_color("primary").hex
+
+                    prompt_txt = FormattedText(
+                        [
+                            ("fg:white", "loud"),
+                            (f"fg:{primary_clr_hex}", "term"),
+                            ("dim", " >"),
+                        ],
+                    )
+                    print_formatted_text(prompt_txt)
                     text = await session.prompt_async(
-                        HTML("<St fg='#87ff87'>loudterm</St> <St>></St> "),
                         multiline=True,
+                        placeholder=FormattedText(
+                            [("dim italic", "Type or paste your text here...")],
+                        ),
                     )
 
+                print()
                 text = text.strip()
                 if not text:
+                    print_error("Not text found\n")
                     continue
 
                 # Handle Configuration Commands
-                if text.startswith("@"):
+                if text.startswith(("@", "/")):
                     cmd = text.lower()
 
-                    # Handle Language Change
-                    if cmd in VOICES:
-                        new_lang_data = VOICES[cmd]
-                        lang_code = new_lang_data["language_code"]
-                        desc = new_lang_data["desc"]
+                    if cmd.startswith("@"):
+                        # Handle Language Change
+                        if cmd in VOICES:
+                            new_lang_data = VOICES[cmd]
+                            lang_code = new_lang_data["language_code"]
+                            desc = new_lang_data["desc"]
 
-                        print(f"Voice changed to: {cmd[1:]}...")
-                        print(f"Switching language to {desc}...")
+                            print_dim(f"Voice changed to: {cmd[1:]}...")
+                            print_dim(f"Switching language to {desc}...\n")
 
-                        config.voice = cmd[1:]
-                        config.lang = lang_code
+                            config.voice = cmd[1:]
+                            config.lang = lang_code
 
-                        # Re-initialize generator
-                        try:
-                            generator = KokoroGenerator(lang_code=lang_code)
-                            print("Engine reloaded successfully!")
-                        except Exception as e:  # noqa: BLE001
-                            print(f"Error reloading engine: {e}")
-                        continue
+                            # Re-initialize generator
+                            try:
+                                generator = KokoroGenerator(lang_code=lang_code)
+                                print_success("Engine reloaded successfully!\n")
+                            except Exception as e:  # noqa: BLE001
+                                print_success(f"Error reloading engine: {e}\n")
+                            continue
 
-                    # Handle Voice Change
-                    if cmd in VOICES:
-                        voice_name = cmd[1:]  # remove @
-                        config.voice = voice_name
-                        print(f"Voice changed to: {VOICES[cmd]}")
-                        continue
+                    if cmd.startswith("/"):
+                        if text.lower().strip() in ("/exit", "/quit", "/q", "/bye"):
+                            print_success("Exiting...\n")
+                            break
 
-                    print(f"Unknown command: {text}")
+                    print_error(f"Unknown command: {text}\n")
                     continue
-
-                if text.lower().strip() in ("/exit", "/quit", "/q", "/bye"):
-                    break
 
                 # Offload processing to avoid freezing the UI
                 await process_input(text, executor, config, generator)
 
             except KeyboardInterrupt:
-                print("\nExiting...")
+                print_success("Exiting...\n")
                 break
             except EOFError:
                 break
             except Exception as e:
                 logger.exception("An error occurred during REPL execution")
-                print(f"Error: {e}")
+                print_error(f"Error: {e}\n")

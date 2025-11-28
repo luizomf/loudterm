@@ -1,4 +1,4 @@
-from loudterm.ui.styles import Styles
+from loudterm.ui.styles import RESET_ALL, STYLES
 
 LOGO: tuple[tuple[str, str], ...] = (
     ("▄                     ▄", "                       "),
@@ -14,7 +14,7 @@ EMPTY_LINE = LOGO_WIDTH * PAD_CHAR
 
 def build_logo(
     *,
-    fg: tuple[str, str] = (Styles.light_fg, Styles.primary_fg),
+    fg: tuple[str, str] = (STYLES.fg("text"), STYLES.fg("primary")),
     bg: tuple[str, str] = ("", ""),
     pad_x: tuple[int, int, int, int] = (2, 1, 1, 2),
     pad_y: tuple[int, int] = (1, 1),
@@ -42,7 +42,7 @@ def build_logo(
     fg_left, fg_right = fg
     bg_left, bg_right = bg
 
-    reset = Styles.reset
+    reset = RESET_ALL
 
     if y1 > 0:
         output.append(y1 * "\n")
@@ -65,8 +65,8 @@ if __name__ == "__main__":
     original_logo = build_logo()
     print(original_logo, end="")
     changed_logo = build_logo(
-        bg=(Styles.dark_bg, Styles.light_bg),
-        fg=(Styles.light_fg, Styles.dark_fg),
+        bg=(STYLES.bg("info"), STYLES.bg("warning")),
+        fg=(STYLES.fg("bg"), STYLES.fg("bg")),
         pad_x=(2, 2, 2, 2),
         pad_y=(1, 1),
     )
