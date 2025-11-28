@@ -1,0 +1,68 @@
+import warnings
+from collections.abc import Generator
+from typing import Any
+
+import numpy as np
+from kokoro import KPipeline
+
+from loudterm.core import AudioResult
+
+
+class KokoroGenerator:
+    """Wrapper for the Kokoro TTS pipeline."""
+
+    def __init__(self, lang_code: str = "a") -> None:
+        """
+        Initialize the Kokoro pipeline.
+
+        Args:
+            lang_code: Language code (e.g., 'a' for American English, 'b' for British).
+        """
+        # KPipeline loads the model weights (can be ~300MB download on first run)
+        # We suppress noisy warnings from torch/internals here
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore",
+                category=FutureWarning,
+                module="torch.nn.utils.weight_norm",
+            )
+            warnings.filterwarnings(
+                "ignore",
+                message=".*dropout option adds dropout.*",
+                category=UserWarning,
+            )
+            warnings.filterwarnings("ignore", module="jieba")
+
+            self.pipeline = KPipeline(
+                lang_code=lang_code,
+                repo_id="hexgrad/Kokoro-82M",
+            )
+
+    def generate(
+        self,
+        text: str,
+        voice: str = "af_heart",
+        speed: float = 1.0,
+        split_pattern: str = r"\n+",
+    ) -> Generator[AudioResult, Any]:
+        """
+        Generate audio chunks from text.
+
+        Yields:
+            AudioResult: A chunk of generated audio.
+        """
+        generator = self.pipeline(
+            text,
+            voice=voice,
+            speed=speed,
+            split_pattern=split_pattern,
+        )
+
+        for _, _, raw_audio in generator:
+            # audio is already a numpy array (float32) or torch tensor
+            # ensure it is numpy
+            samples = raw_audio
+            if not isinstance(samples, np.ndarray):
+                samples = samples.numpy()  # type: ignore[reportUnknownMemberType]
+
+            yield AudioResult(samples=samples, sample_rate=24000)

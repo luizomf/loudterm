@@ -1,12 +1,15 @@
 from dataclasses import dataclass
 from typing import Protocol
 
+import numpy as np
+import numpy.typing as npt
+
 
 @dataclass(slots=True)
 class AudioResult:
     """Represents an in-memory audio buffer"""
 
-    samples: str  # this will be np.ndarray[np.float32]
+    samples: npt.NDArray[np.float32]
     sample_rate: int
 
 

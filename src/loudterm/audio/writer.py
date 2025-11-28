@@ -1,17 +1,15 @@
 from pathlib import Path
 
+import soundfile as sf
+
 from loudterm.core import AudioResult
 
 
 class AudioWriter:
-    """High-level audio writer API
-
-    Later this will wrap soundfile or similar.
-    """
+    """High-level audio writer API using soundfile."""
 
     def save(self, audio: AudioResult, path: Path) -> None:
-        msg = (
-            "Audio writing is not implemented yet."
-            "This is a placeholder for the loudterm audio writer."
-        )
-        raise NotImplementedError(msg)
+        """Save audio to disk."""
+        # Ensure parent directory exists
+        path.parent.mkdir(parents=True, exist_ok=True)
+        sf.write(path, audio.samples, audio.sample_rate)  # type: ignore[reportUnknownMemberType]

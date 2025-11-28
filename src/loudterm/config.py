@@ -7,7 +7,6 @@ OUTPUT_DIR = ROOT_DIR / "output"
 
 @dataclass(slots=True)
 class AppConfig:
-    engine: str = "kokoro"
     voice: str | None = None
     lang: str | None = None
     speed: float = 1.0
@@ -15,5 +14,18 @@ class AppConfig:
     auto_save: bool = True
 
 
-def load_config() -> AppConfig:
-    return AppConfig()
+def load_config(
+    voice: str,
+    lang: str,
+    *,
+    output_dir: Path | None = None,
+    speed: float = 1.0,
+    auto_save: bool = True,
+) -> AppConfig:
+    return AppConfig(
+        voice=voice,
+        lang=lang,
+        output_dir=output_dir or OUTPUT_DIR,
+        speed=speed,
+        auto_save=auto_save,
+    )

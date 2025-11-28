@@ -8,10 +8,29 @@ authors = [{ name = "Luiz Otávio Miranda" }]
 requires-python = ">=3.13"
 dependencies = [
     "python-dotenv>=1.1.0",
+    "numpy>=2.1.0",
+    "sounddevice>=0.5.0",
+    "soundfile>=0.12.1",
+    "prompt_toolkit>=3.0.48",
+    "kokoro>=0.3.4",
+    "ordered-set>=4.1.0",
+    "pyopenjtalk>=0.4.1",
+    "fugashi[unidic,unidic-lite]>=1.5.2",
+    "jaconv>=0.4.0",
+    "mojimoji>=0.0.13",
+    "pypinyin>=0.55.0",
+    "cn2an>=0.5.23",
+    "jieba>=0.42.1",
 ]
 
 [dependency-groups]
-dev = ["pyright>=1.1.407", "pytest>=8.4.2", "ruff>=0.14.6", "watchdog>=6.0.0"]
+dev = [
+    "pip>=25.3",
+    "pyright>=1.1.407",
+    "pytest>=8.4.2",
+    "ruff>=0.14.6",
+    "watchdog>=6.0.0",
+]
 
 [project.urls]
 Homepage = "https://www.otaviomiranda.com.br/"

@@ -1,3 +1,5 @@
+from loudterm.ui.styles import Styles
+
 LOGO: tuple[tuple[str, str], ...] = (
     ("▄                     ▄", "                       "),
     ("█     █▀▀▀█ █   █ █▀▀▀█", "▀▀█▀▀ █▀▀▀█ █▀▀▀█ █▀█▀▄"),
@@ -6,11 +8,13 @@ LOGO: tuple[tuple[str, str], ...] = (
 )
 NEW_LINE = "\n"
 PAD_CHAR = " "
+LOGO_WIDTH = len(LOGO[0][0]) * 2
+EMPTY_LINE = LOGO_WIDTH * PAD_CHAR
 
 
 def build_logo(
     *,
-    fg: tuple[str, str] = ("\x1b[38;5;15m", "\x1b[38;5;120m"),
+    fg: tuple[str, str] = (Styles.light_fg, Styles.primary_fg),
     bg: tuple[str, str] = ("", ""),
     pad_x: tuple[int, int, int, int] = (2, 1, 1, 2),
     pad_y: tuple[int, int] = (1, 1),
@@ -38,25 +42,32 @@ def build_logo(
     fg_left, fg_right = fg
     bg_left, bg_right = bg
 
-    reset = "\x1b[0m"
+    reset = Styles.reset
 
-    output.append(y1 * NEW_LINE)
+    if y1 > 0:
+        output.append(y1 * "\n")
+
     for line in LOGO:
-        output.extend([bg_left, fg_left, pad_left1, line[0], pad_right1, reset])
-        output.extend([bg_right, fg_right, pad_left2, line[1], pad_right2, reset])
+        output.append(reset)
+        output.extend([bg_left, fg_left, pad_left1, line[0], pad_right1])
+        output.append(reset)
+        output.extend([bg_right, fg_right, pad_left2, line[1], pad_right2])
+        output.append(reset)
         output.append(NEW_LINE)
-    output.append(y2 * NEW_LINE)
+
+    if y2 > 0:
+        output.append(y2 * "\n")
 
     return "".join(output)
 
 
 if __name__ == "__main__":
     original_logo = build_logo()
-    print(original_logo)
+    print(original_logo, end="")
     changed_logo = build_logo(
-        bg=("\x1b[48;5;81m", "\x1b[48;5;198m"),
-        fg=("\x1b[38;5;0m", "\x1b[38;5;0m"),
+        bg=(Styles.dark_bg, Styles.light_bg),
+        fg=(Styles.light_fg, Styles.dark_fg),
         pad_x=(2, 2, 2, 2),
         pad_y=(1, 1),
     )
-    print(changed_logo)
+    print(changed_logo, end="")
