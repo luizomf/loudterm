@@ -1,5 +1,6 @@
 .DS_Store
 db.json
+output
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
