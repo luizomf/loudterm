@@ -1,3 +1,5 @@
+from prompt_toolkit.shortcuts import clear
+
 from loudterm.ui.logo import build_logo
 from loudterm.ui.styles import STYLES
 
@@ -109,38 +111,22 @@ def print_text(
     print_(*values, end=end, sep=sep, flush=flush)
 
 
-if __name__ == "__main__":
-    text = "This is an example text"
+def print_header() -> None:
+    clear()
+    print(build_logo(), end="", flush=True)
+    print_dim(
+        "Initializing Kokoro engine (this may take a moment to download weights)...",
+    )
+    print()
 
-    print(build_logo())
-    print_primary(text)
-    print_info("Hello world", 123, 456)
-    print_info(f"Processing {len(text)} chars...", 123, 456)
-    print_warning("Hello world", 123, 456)
-    print_info("Hello world", 123, 456)
-    print_info(f"Processing {len(text)} chars...", 123, 456)
-    print_info("Hello world", 123, 456)
-    print_info(f"Processing {len(text)} chars...", 123, 456)
-    print_warning("Hello world", 123, 456)
-    print_info("Hello world", 123, 456)
-    print_error(f"Processing {len(text)} chars...", 123, 456)
-    print_success("Hello world", 123, 456)
-    print_info(f"Processing {len(text)} chars...", 123, 456)
-    print_warning("Hello world", 123, 456)
-    print_info("Hello world", 123, 456)
-    print_info(f"Processing {len(text)} chars...", 123, 456)
-    print_info("Hello world", 123, 456)
-    print_info(f"Processing {len(text)} chars...", 123, 456)
-    print_warning("Hello world", 123, 456)
-    print_info("Hello world", 123, 456)
-    print_info(f"Processing {len(text)} chars...", 123, 456)
-    print_info("Hello world", 123, 456)
-    print_info(f"Processing {len(text)} chars...", 123, 456)
-    print_warning("Hello world", 123, 456)
-    print_info("Hello world", 123, 456)
-    print_error(f"Processing {len(text)} chars...", 123, 456)
-    print_info("Hello world", 123, 456)
-    print_info(f"Processing {len(text)} chars...", 123, 456)
-    print_warning("Hello world", 123, 456)
-    print_info("Hello world", 123, 456)
-    print_info(f"Processing {len(text)} chars...", 123, 456)
+
+def print_description() -> None:
+    print_primary(
+        "Type your text and press [Meta+Enter] or [Esc] then [Enter] to submit.",
+    )
+    print_dim("Commands: Type '@' to see options for voice/language.")
+    print_text("Press [Ctrl+C] or /exit [Meta+Enter] to exit.\n")
+
+
+def print_exit() -> None:
+    print_success("Exiting...\n")

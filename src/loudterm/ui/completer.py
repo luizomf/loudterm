@@ -3,7 +3,7 @@ from collections.abc import Iterable
 from prompt_toolkit.completion import CompleteEvent, Completer, Completion
 from prompt_toolkit.document import Document
 
-from loudterm.backend.kokoro_voices import VOICES
+from loudterm.backend.kokoro_voices import KOKORO_VOICES
 from loudterm.ui.commands import COMMANDS
 
 
@@ -19,12 +19,11 @@ class LoudTermCompleter(Completer):
 
         word = document.get_word_before_cursor(WORD=True)
 
-        # Only trigger if the word starts with @
         if not word.startswith(commands):
             return
 
         if word.startswith(voice_cmd_chr):
-            for voice, data in VOICES.items():
+            for voice, data in KOKORO_VOICES.items():
                 if voice.startswith(word):
                     yield Completion(
                         voice,

@@ -1,4 +1,4 @@
-VOICES = {
+KOKORO_VOICES = {
     "@af_heart": {
         "voice": "Female (Heart)",
         "language_code": "a",

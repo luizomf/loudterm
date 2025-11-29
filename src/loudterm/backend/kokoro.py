@@ -2,8 +2,8 @@ import warnings
 from collections.abc import Generator
 from typing import Any
 
-import numpy as np
 from kokoro import KPipeline
+from torch import FloatTensor, Tensor
 
 from loudterm.core import AudioResult
 
@@ -59,10 +59,7 @@ class KokoroGenerator:
         )
 
         for _, _, raw_audio in generator:
-            # audio is already a numpy array (float32) or torch tensor
-            # ensure it is numpy
             samples = raw_audio
-            if not isinstance(samples, np.ndarray):
-                samples = samples.numpy()  # type: ignore[reportUnknownMemberType]
 
-            yield AudioResult(samples=samples, sample_rate=24000)
+            if isinstance(samples, (FloatTensor, Tensor)):
+                yield AudioResult(samples=samples, sample_rate=24000)
