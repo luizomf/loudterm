@@ -9,3 +9,5 @@ class AudioResult:
 
     samples: Tensor
     sample_rate: int
+    graphemes: str | None = None
+    phonemes: str | None = None

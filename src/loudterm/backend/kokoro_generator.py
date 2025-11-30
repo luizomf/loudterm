@@ -58,8 +58,13 @@ class KokoroGenerator:
             split_pattern=split_pattern,
         )
 
-        for _, _, raw_audio in generator:
+        for graphemes, phonemes, raw_audio in generator:
             samples = raw_audio
 
             if isinstance(samples, (FloatTensor, Tensor)):
-                yield AudioResult(samples=samples, sample_rate=24000)
+                yield AudioResult(
+                    samples=samples,
+                    graphemes=str(graphemes),
+                    phonemes=str(phonemes),
+                    sample_rate=24000,
+                )

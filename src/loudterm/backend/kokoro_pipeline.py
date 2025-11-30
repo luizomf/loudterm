@@ -4,7 +4,7 @@ import torch
 
 from loudterm.audio.player import AudioPlayer
 from loudterm.audio.writer import AudioWriter
-from loudterm.backend.kokoro import KokoroGenerator
+from loudterm.backend.kokoro_generator import KokoroGenerator
 from loudterm.config import AppConfig
 from loudterm.core import AudioResult
 from loudterm.ui.prints import print_error, print_info, print_success

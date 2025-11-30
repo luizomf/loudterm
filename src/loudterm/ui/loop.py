@@ -1,6 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 
-from loudterm.backend.kokoro import KokoroGenerator
+from loudterm.backend.kokoro_generator import KokoroGenerator
 from loudterm.backend.kokoro_process_input import kokoro_process_input
 from loudterm.config import AppConfig
 from loudterm.ui.prints import print_error, print_exit, print_success
