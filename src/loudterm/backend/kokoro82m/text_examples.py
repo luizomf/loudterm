@@ -1,3 +1,5 @@
+from loudterm.backend.kokoro82m.text_examples_hindi import HINDI
+
 english = """
 I've been working on this idea for a while, and every time I come back to it, \
 I notice something new. Sometimes it's a small detail, sometimes it's a whole \
@@ -38,6 +40,9 @@ que ele tem de melhor. Com tempo, ajustes e experimentos, a voz começa a \
 parecer menos uma máquina e mais alguém contando uma história.
 """
 
+# need:
+# uv add pyopenjtalk 'fugashi[unidic-lite]' jaconv mojimoji unidic
+# uv run -m unidic download
 japanese = """\
 このアイデアにはずっと取り組んでいて、時々ふと戻ってくるたびに、新しい発見があります。\
 小さな気づきの時もあれば、急に全体がつながって見える瞬間もあります。\
@@ -55,6 +60,8 @@ TTS がこの雰囲気をつかんでくれたら、きっとうまくいくと�
 何度か試していくうちに、だんだん“人の声”みたいに聞こえてくるようになります。
 """
 
+# need:
+# uv add ordered_set pypinyin cn2an jieba
 chinese = """\
 这个想法我已经研究了一段时间了。每次回头再看的时候，总会发现一些新的东西。\
 有时候是很小的细节，有时候是一整段突然变得清晰起来。人的大脑真的很神奇，\
@@ -67,13 +74,78 @@ chinese = """\
 当然，还有很多地方需要测试。有些句子听起来很好，但有些还是会有点机械感。\
 这很正常。每个模型都有自己的习惯，了解它、配合它，也是测试过程的一部分。\
 慢慢调整、多试几次之后，声音就会开始像真人讲故事一样自然起来。
+"""  # noqa: RUF001
+
+french = """\
+Je travaille sur cette idée depuis un bon moment, et chaque fois que j’y \
+reviens, je découvre quelque chose de nouveau. Parfois c’est un petit détail, \
+parfois une partie entière qui devient soudain plus claire. Le cerveau est \
+vraiment étrange : même quand on n’y fait pas attention, il complète les vides \
+tout seul. Et c’est exactement pour ça que ce projet reste aussi motivant pour \
+moi.
+
+Quand j’imagine la façon dont cela devrait sonner, je vois une voix calme, \
+stable, mais jamais monotone. Une voix qui passe d’une idée à l’autre sans se \
+presser, en laissant un peu d’espace pour respirer entre les phrases. Pas trop \
+formelle, pas trop détendue non plus. Juste un rythme naturel. Si le TTS \
+réussit à capter cette ambiance, alors je sais que je suis sur la bonne voie.
+
+Bien sûr, il reste encore beaucoup à tester. Certaines phrases passent très \
+bien, et d’autres sonnent un peu rigides, presque mécaniques. C’est normal. \
+Chaque modèle a ses petites habitudes, et apprendre à écrire en tenant compte \
+de ces nuances fait partie du jeu. Avec quelques ajustements et un peu d’\
+expérience, la voix finit par sembler moins artificielle et plus proche d’un \
+vrai récit.
+"""  # noqa: RUF001
+
+italian = """\
+Sto lavorando a questa idea da un bel po’, e ogni volta che ci ritorno trovo \
+qualcosa di nuovo. A volte è un piccolo dettaglio, altre volte un’intera parte \
+che improvvisamente diventa più chiara. Il cervello è davvero strano: anche \
+quando non ci facciamo caso, continua a colmare i vuoti da solo. Ed è proprio \
+questo che rende il progetto sempre interessante per me.
+
+Quando immagino come dovrebbe suonare tutto questo, penso a una voce calma e \
+stabile, ma non monotona. Una voce che passa da un pensiero all’altro senza \
+correre, lasciando un po’ di spazio per respirare. Niente di troppo formale, \
+niente di troppo informale. Solo un ritmo naturale. Se il TTS riesce a \
+catturare questa sensazione, allora significa che siamo sulla strada giusta.
+
+Ovviamente c’è ancora molto da testare. Alcune frasi suonano benissimo, mentre \
+altre risultano un po’ rigide, quasi meccaniche. È normale. Ogni modello ha le \
+sue abitudini, e imparare a scrivere tenendole in considerazione fa parte del \
+processo. Con un po’ di pazienza e qualche aggiustamento, la voce comincia a \
+sembrare meno artificiale e più simile a una vera narrazione.
+"""  # noqa: RUF001
+
+spanish = """\
+He estado trabajando en esta idea desde hace tiempo, y cada vez que vuelvo a \
+revisarla descubro algo nuevo. A veces es un pequeño detalle, y otras veces es \
+una parte entera que de repente se vuelve más clara. El cerebro es realmente \
+curioso: incluso cuando no prestamos atención, sigue completando los espacios \
+por su cuenta. Y por eso este proyecto siempre me mantiene motivado.
+
+Cuando imagino cómo debería sonar todo esto, pienso en una voz tranquila y \
+estable, pero sin caer en la monotonía. Una voz que pasa de una idea a otra \
+sin prisa, dejando un poco de espacio para respirar entre las frases. Nada \
+demasiado formal, pero tampoco demasiado relajado. Solo un ritmo natural. Si \
+el TTS logra captar esa sensación, entonces estamos yendo por buen camino.
+
+Por supuesto, todavía queda mucho por probar. Algunas frases suenan muy bien, \
+mientras que otras se sienten un poco rígidas, casi mecánicas. Es normal. Cada \
+modelo tiene sus particularidades, y aprender a escribir teniendo eso en \
+cuenta también forma parte del proceso. Con unos cuantos ajustes y un poco de \
+práctica, la voz empieza a sonar menos artificial y mucho más como un relato real.
 """
 
-
-KOKORO_TEXT_EXAMPLES = {
-    # "a": english,
-    # "b": english,
-    # "p": portuguese,
-    # "j": japanese,
+TEXT_EXAMPLES = {
+    "a": english,
+    "b": english,
+    "e": spanish,
+    "f": french,
+    "h": HINDI,
+    "i": italian,
+    "j": japanese,
+    "p": portuguese,
     "z": chinese,
 }

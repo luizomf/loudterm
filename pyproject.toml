@@ -13,15 +13,15 @@ dependencies = [
   "soundfile>=0.12.1",
   "prompt_toolkit>=3.0.48",
   "kokoro>=0.3.4",
-  "ordered-set>=4.1.0",     # chinese
-  # "pyopenjtalk>=0.4.1",          # japanese
-  # "fugashi[unidic-lite]>=1.5.2", # japanese
-  # "jaconv>=0.4.0",               # japanese
-  # "mojimoji>=0.0.13",            # japanese
-  "pypinyin>=0.55.0", # chinese
-  "cn2an>=0.5.23",    # chinese
-  "jieba>=0.42.1",    # chinese
-  # "unidic>=1.1.0", # japanese (need `uv run -m unidic download`)
+  "ordered-set>=4.1.0",          # chinese
+  "pyopenjtalk>=0.4.1",          # japanese
+  "fugashi[unidic-lite]>=1.5.2", # japanese
+  "jaconv>=0.4.0",               # japanese
+  "mojimoji>=0.0.13",            # japanese
+  "pypinyin>=0.55.0",            # chinese
+  "cn2an>=0.5.23",               # chinese
+  "jieba>=0.42.1",               # chinese
+  "unidic>=1.1.0",               # japanese (need `uv run -m unidic download`)
 ]
 
 [dependency-groups]

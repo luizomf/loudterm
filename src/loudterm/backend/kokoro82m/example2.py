@@ -1,38 +1,44 @@
 # EXAMPLE USING KokoroGenerator
+import time
+
 import soundfile as sf
 import torch
 
 from loudterm.backend.kokoro82m.generator import KokoroGenerator
-from loudterm.backend.kokoro82m.text_examples import KOKORO_TEXT_EXAMPLES
+from loudterm.backend.kokoro82m.text_examples import TEXT_EXAMPLES
 from loudterm.backend.kokoro82m.voices import KOKORO_VOICES
+from loudterm.config import OUTPUT_DIR
 
-for voice, data in KOKORO_VOICES.items():
-    all_chunks: list[torch.Tensor] = []
-    language_code = data["language_code"]
+for voice_key, voice_data in KOKORO_VOICES.items():
+    audio_parts: list[torch.Tensor] = []
+    lang_code = voice_data["language_code"]
 
-    if language_code not in KOKORO_TEXT_EXAMPLES:
+    if lang_code not in TEXT_EXAMPLES:
+        print("Missing text for language:", voice_data["desc"])
+        print("-" * 80)
         continue
 
-    text = KOKORO_TEXT_EXAMPLES[language_code]
+    text = TEXT_EXAMPLES[lang_code]
 
-    kokoro = KokoroGenerator(lang_code=language_code)
+    filename_ts = f"{time.time():.0f}"
+    kokoro = KokoroGenerator(lang_code=lang_code)
+    audio_result = None
+    voice = voice_key[1:]
 
-    result = None
-
-    for result in kokoro.generate(
+    for audio_result in kokoro.generate(
         text=text,
-        voice=voice[1:],
+        voice=voice,
     ):
+        print(voice)
+        print(audio_result.graphemes)
+        print("-" * 80)
         print()
-        print(voice[1:])
-        print(result.graphemes)
-        print(80 * "#")
-        print()
-        all_chunks.append(result.samples)
+        audio_parts.append(audio_result.samples)
 
-    if all_chunks and result:
+    if audio_parts and audio_result:
+        output_file = OUTPUT_DIR / f"{filename_ts}_{voice}_full.wav"
         sf.write(  # type: ignore[reportUnknownMemberType]
-            f"output/{voice[1:]}.wav",
-            torch.cat(all_chunks, dim=0).float(),
-            samplerate=result.sample_rate,
+            output_file,
+            torch.cat(audio_parts, dim=0).float(),
+            samplerate=audio_result.sample_rate,
         )
