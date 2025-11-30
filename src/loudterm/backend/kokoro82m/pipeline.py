@@ -64,12 +64,7 @@ def kokoro_blocking_pipeline(
         print_success("Done.\n")
 
 
-def load_kokoro_generator(app_config: AppConfig) -> KokoroGenerator | None:
-    try:
-        generator = KokoroGenerator(lang_code=app_config.lang)
-        print_success("Engine ready!\n")
-    except Exception as e:  # noqa: BLE001
-        print_error(f"Failed to initialize Kokoro engine: {e}\n")
-        return None
-    else:
-        return generator
+def load_kokoro_generator(app_config: AppConfig) -> KokoroGenerator:
+    generator = KokoroGenerator(lang_code=app_config.lang)
+    print_success("Engine ready!\n")
+    return generator
