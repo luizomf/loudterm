@@ -40,12 +40,7 @@ async def process_commands(
 
         try:
             new_generator = load_kokoro_generator(app_config)
-
-            if new_generator is None:
-                msg = "Failed to load Kokoro."
-                raise RuntimeError(msg)
-
-            del kokoro_generator
+            del kokoro_generator  # not necessary, only to ensure garbage collection
             kokoro_generator = new_generator
 
         except Exception as e:  # noqa: BLE001
