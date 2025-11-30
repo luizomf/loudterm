@@ -149,3 +149,9 @@ TEXT_EXAMPLES = {
     "p": portuguese,
     "z": chinese,
 }
+
+if __name__ == "__main__":
+    for text in TEXT_EXAMPLES.values():
+        print(text)
+
+        print()

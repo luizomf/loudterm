@@ -56,7 +56,7 @@ def kokoro_blocking_pipeline(
             sample_rate=sample_rate,
         )
 
-        filename = f"output_{int(time.time())}.wav"
+        filename = f"{int(time.time())}_{app_config.voice}.wav"
         output_path = app_config.output_dir / filename
 
         print_success(f"Saving to {output_path}...")
