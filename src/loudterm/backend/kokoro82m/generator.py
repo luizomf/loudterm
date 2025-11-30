@@ -1,11 +1,30 @@
 import warnings
 from collections.abc import Generator
+from contextlib import contextmanager
 from typing import Any
 
 from kokoro import KPipeline
 from torch import FloatTensor, Tensor
 
 from loudterm.core import AudioResult
+
+
+@contextmanager
+def kokoro_warning_filter() -> Generator[None]:
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore",
+            category=FutureWarning,
+            module="torch.nn.utils.weight_norm",
+        )
+        warnings.filterwarnings(
+            "ignore",
+            message=".*dropout option adds dropout.*",
+            category=UserWarning,
+            module="torch.nn.modules.rnn",
+        )
+        warnings.filterwarnings("ignore", module="jieba")
+        yield
 
 
 class KokoroGenerator:
@@ -20,19 +39,7 @@ class KokoroGenerator:
         """
         # KPipeline loads the model weights (can be ~300MB download on first run)
         # We suppress noisy warnings from torch/internals here
-        with warnings.catch_warnings():
-            warnings.filterwarnings(
-                "ignore",
-                category=FutureWarning,
-                module="torch.nn.utils.weight_norm",
-            )
-            warnings.filterwarnings(
-                "ignore",
-                message=".*dropout option adds dropout.*",
-                category=UserWarning,
-            )
-            warnings.filterwarnings("ignore", module="jieba")
-
+        with kokoro_warning_filter():
             self.pipeline = KPipeline(
                 lang_code=lang_code,
                 repo_id="hexgrad/Kokoro-82M",

@@ -1,8 +1,8 @@
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
-from loudterm.backend.kokoro_generator import KokoroGenerator
-from loudterm.backend.kokoro_pipeline import kokoro_blocking_pipeline
+from loudterm.backend.kokoro82m.generator import KokoroGenerator
+from loudterm.backend.kokoro82m.pipeline import kokoro_blocking_pipeline
 from loudterm.config import AppConfig
 
 

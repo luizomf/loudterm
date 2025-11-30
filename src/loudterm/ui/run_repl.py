@@ -1,4 +1,4 @@
-from loudterm.backend.kokoro_pipeline import (
+from loudterm.backend.kokoro82m.pipeline import (
     load_kokoro_generator,
 )
 from loudterm.config import AppConfig

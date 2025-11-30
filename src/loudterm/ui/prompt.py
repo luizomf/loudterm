@@ -3,7 +3,7 @@ from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit.patch_stdout import patch_stdout
 from prompt_toolkit.styles import Style
 
-from loudterm.backend.kokoro_voices import KOKORO_VOICES
+from loudterm.backend.kokoro82m.voices import KOKORO_VOICES
 from loudterm.config import AppConfig
 from loudterm.ui.completer import LoudTermCompleter
 from loudterm.ui.key_bindings import make_key_bindings

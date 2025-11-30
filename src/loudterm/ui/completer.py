@@ -3,7 +3,7 @@ from collections.abc import Iterable
 from prompt_toolkit.completion import CompleteEvent, Completer, Completion
 from prompt_toolkit.document import Document
 
-from loudterm.backend.kokoro_voices import KOKORO_VOICES
+from loudterm.backend.kokoro82m.voices import KOKORO_VOICES
 from loudterm.ui.commands import COMMANDS
 
 

@@ -1,3 +1,22 @@
+# Voices that I liked after various tests:
+# English - American and British
+# More Natural - af_heart, af_aoede, af_sara, bf_emma, bf_isabella, bf_lily,
+#                bm_george
+# Great but different - af_bella, af_nicole, am_michael, am_santa, bm_lewis
+# Good - af_kore, af_sky
+# Good - but too fast: af_alloy, af_jessica, af_nova, af_river, am_echo,
+#        am_liam, am_puck
+# News sounding - bf_alice, bm_daniel
+
+# Meh - am_adam, am_onyx, bm_fable
+# Just fast - am_eric
+# Voice changes from start to finish: am_fenrir
+
+# Portuguese:
+# pf_dora and pm_adam are normal (pm_santa is different)
+
+# I don't have knowledge in the other languages to comment
+
 KOKORO_VOICES = {
     "@af_heart": {
         "voice": "Female (Heart)",

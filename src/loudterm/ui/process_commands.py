@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from typing import Any, Literal
 
-from loudterm.backend.kokoro import KokoroGenerator
-from loudterm.backend.kokoro_pipeline import load_kokoro_generator
-from loudterm.backend.kokoro_voices import KOKORO_VOICES
+from loudterm.backend.kokoro82m.generator import KokoroGenerator
+from loudterm.backend.kokoro82m.pipeline import load_kokoro_generator
+from loudterm.backend.kokoro82m.voices import KOKORO_VOICES
 from loudterm.config import AppConfig
 from loudterm.ui.prints import print_dim, print_error, print_exit, print_success
 
