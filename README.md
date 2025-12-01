@@ -87,3 +87,64 @@ Generated files live in `output/` as `<timestamp>_<voice>.wav`.
   connectivity is stable.
 - Japanese voices raising tokenizer errors → run `uv run -m unidic download` (or
   the pip equivalent) once.
+
+---
+
+## Kokoro Instructions and Acknowledgements
+
+The text below was copied directly from the
+[Kokoro repository](https://github.com/hexgrad/kokoro/blob/main/README.md).
+
+### Windows Installation
+
+To install espeak-ng on Windows:
+
+1. Go to [espeak-ng releases](https://github.com/espeak-ng/espeak-ng/releases)
+2. Click on **Latest release**
+3. Download the appropriate `*.msi` file (e.g.
+   **espeak-ng-20191129-b702b03-x64.msi**)
+4. Run the downloaded installer
+
+For advanced configuration and usage on Windows, see the
+[official espeak-ng Windows guide](https://github.com/espeak-ng/espeak-ng/blob/master/docs/guide.md)
+
+### MacOS Apple Silicon GPU Acceleration
+
+On Mac M1/M2/M3/M4 devices, you can explicitly specify the environment variable
+`PYTORCH_ENABLE_MPS_FALLBACK=1` to enable GPU acceleration.
+
+```bash
+PYTORCH_ENABLE_MPS_FALLBACK=1 python run-your-kokoro-script.py
+```
+
+### Conda Environment
+
+Use the following conda `environment.yml` if you're facing any dependency
+issues.
+
+```yaml
+name: kokoro
+channels:
+  - defaults
+dependencies:
+  - python==3.9
+  - libstdcxx~=12.4.0 # Needed to load espeak correctly. Try removing this if you're facing issues with Espeak fallback.
+  - pip:
+      - kokoro>=0.3.1
+      - soundfile
+      - misaki[en]
+```
+
+### Acknowledgements
+
+- 🛠️ [@yl4579](https://huggingface.co/yl4579) for architecting StyleTTS 2.
+- 🏆 [@Pendrokar](https://huggingface.co/Pendrokar) for adding Kokoro as a
+  contender in the TTS Spaces Arena.
+- 📊 Thank you to everyone who contributed synthetic training data.
+- ❤️ Special thanks to all compute sponsors.
+- 👾 Discord server: https://discord.gg/QuGxSWBfQy
+- 🪽 Kokoro is a Japanese word that translates to "heart" or "spirit". Kokoro is
+  also a
+  [character in the Terminator franchise](https://terminator.fandom.com/wiki/Kokoro)
+  along with
+  [Misaki](https://github.com/hexgrad/misaki?tab=readme-ov-file#acknowledgements).
