@@ -1,10 +1,11 @@
 from prompt_toolkit import PromptSession, print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
+from prompt_toolkit.history import FileHistory
 from prompt_toolkit.patch_stdout import patch_stdout
 from prompt_toolkit.styles import Style
 
 from loudterm.backend.kokoro82m.voices import KOKORO_VOICES
-from loudterm.config import AppConfig
+from loudterm.config import OUTPUT_DIR, AppConfig
 from loudterm.ui.completer import LoudTermCompleter
 from loudterm.ui.key_bindings import make_key_bindings
 from loudterm.ui.styles import STYLES
@@ -38,10 +39,14 @@ def make_bootom_toolbar(app_config: AppConfig) -> FormattedText:
 
 
 async def get_input(app_config: AppConfig) -> str | None:
+    history = FileHistory(OUTPUT_DIR / "text_history.txt")
+
     session: PromptSession[str] = PromptSession(
         completer=LoudTermCompleter(),
         complete_while_typing=True,
         key_bindings=make_key_bindings(app_config),
+        history=history,
+        enable_history_search=False,
     )
 
     with patch_stdout():

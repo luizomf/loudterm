@@ -13,7 +13,7 @@ voice = "af_heart"
 lang_code = "a"
 
 text = TEXT_EXAMPLES[lang_code]
-sr = 24000
+sr = 24000  # sample rate
 
 with warnings.catch_warnings():
     warnings.filterwarnings(
