@@ -13,7 +13,6 @@ voice = "af_heart"
 lang_code = "a"
 
 text = TEXT_EXAMPLES[lang_code]
-audio_parts: list[torch.Tensor] = []
 sr = 24000
 
 with warnings.catch_warnings():
@@ -33,7 +32,9 @@ with warnings.catch_warnings():
     pipeline = KPipeline(lang_code=lang_code, repo_id="hexgrad/Kokoro-82M")
     filename_ts = f"{time.time():.0f}"
 
+    audio_parts: list[torch.Tensor] = []
     generator = pipeline(text, voice=voice)
+
     for i, (gs, ps, audio) in enumerate(generator):
         if not isinstance(audio, (torch.Tensor, torch.FloatTensor)):
             continue
@@ -51,4 +52,4 @@ with warnings.catch_warnings():
 if audio_parts:
     final_audio = torch.cat(audio_parts, dim=0).float()
     output_file = OUTPUT_DIR / f"{voice}_{filename_ts}_full.wav"
-    sf.write(output_file, final_audio, 24000)  # type: ignore[reportUnknownMemberType]
+    sf.write(output_file, final_audio, sr)  # type: ignore[reportUnknownMemberType]
