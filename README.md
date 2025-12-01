@@ -2,9 +2,9 @@
 
 ![loudterm](./assets/loudterm-logo-medium.png)
 
-Interactive REPL that turns text into speech using the Kokoro 82M model. Pick
-voices/languages, stream audio, auto‑play, and auto‑save WAVs without leaving
-the terminal.
+Interactive REPL that turns text into speech using the
+[Kokoro 82M model](https://github.com/hexgrad/kokoro). Pick voices/languages,
+stream audio, auto‑play, and auto‑save WAVs without leaving the terminal.
 
 ## Features
 
