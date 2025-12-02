@@ -64,9 +64,9 @@ pipeline = KPipeline(lang_code=lang_code, repo_id="hexgrad/Kokoro-82M")
 
 # Vozes (o total dos valores precisa dar 1)
 voices = {
-    "pf_dora": 1,  # Deixo as vozes do PT-BR mais pesadas (acima de 0.5)
-    # "pm_santa": 0.2,  # Isso também é PT-BR (total 0.6)
-    # "af_heart": 0.4,  # Voz americana (dá um pouquinho de sotaque)
+    "pf_dora": 0.4,  # Deixo as vozes do PT-BR mais pesadas (acima de 0.5)
+    "pm_santa": 0.2,  # Isso também é PT-BR (total 0.6)
+    "af_heart": 0.4,  # Voz americana (dá um pouquinho de sotaque)
 }
 # Multiplica a voz pelo peso e soma todas as vozes
 new_voice = sum([pipeline.load_voice(k) * v for k, v in voices.items()])
