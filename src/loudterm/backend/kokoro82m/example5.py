@@ -34,7 +34,7 @@ new_voice = mixed / torch.norm(mixed)  # type: ignore[reportUnknownMemberType]
 
 final_audio: list[torch.Tensor] = []
 
-for gs, ps, audio in pipeline(text=TEXT_EXAMPLES[lang_code], voice=mixed, speed=1):  # type: ignore[reportArgumentType]
+for gs, ps, audio in pipeline(text=TEXT_EXAMPLES[lang_code], voice=mixed, speed=0.9):  # type: ignore[reportArgumentType]
     print(gs)
     print("-" * 80)
     print(ps)
