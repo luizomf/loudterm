@@ -24,9 +24,9 @@ voices = {
     "pf_dora": 0.25,  # Deixo as vozes do PT-BR mais pesadas
     "pm_santa": 0.25,  # Isso também é PT-BR
     "af_bella": 0.1,  # Voz americana (dá um pouquinho de sotaque)
-    "if_sara": 0.1,  # Voz americana (dá um pouquinho de sotaque)
+    "if_sara": 0.1,  # Voz italiana (dá um pouquinho de sotaque)
     "af_heart": 0.2,  # Voz americana (dá um pouquinho de sotaque)
-    "ff_siwis": 0.1,  # Voz americana (dá um pouquinho de sotaque)
+    "ff_siwis": 0.1,  # Voz do francês (dá um pouquinho de sotaque)
 }
 # Multiplica a voz pelo peso e soma todas as vozes
 mixed = sum(pipeline.load_voice(k) * v for k, v in voices.items())
