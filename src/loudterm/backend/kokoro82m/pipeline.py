@@ -65,6 +65,6 @@ def kokoro_blocking_pipeline(
 
 
 def load_kokoro_generator(app_config: AppConfig) -> KokoroGenerator:
-    generator = KokoroGenerator(lang_code=app_config.lang)
+    generator = KokoroGenerator(lang_code=app_config.lang, device=app_config.device)
     print_success("Engine ready!\n")
     return generator
