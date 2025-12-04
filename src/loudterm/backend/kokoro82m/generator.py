@@ -1,7 +1,7 @@
 import warnings
 from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Any
+from typing import Any, Optional
 
 from kokoro import KPipeline
 from torch import FloatTensor, Tensor
@@ -30,7 +30,7 @@ def kokoro_warning_filter() -> Generator[None]:
 class KokoroGenerator:
     """Wrapper for the Kokoro TTS pipeline."""
 
-    def __init__(self, lang_code: str = "a") -> None:
+    def __init__(self, lang_code: str = "a", device: Optional[str] = None) -> None:
         """
         Initialize the Kokoro pipeline.
 
@@ -43,6 +43,7 @@ class KokoroGenerator:
             self.pipeline = KPipeline(
                 lang_code=lang_code,
                 repo_id="hexgrad/Kokoro-82M",
+                device=device,
             )
 
     def generate(
