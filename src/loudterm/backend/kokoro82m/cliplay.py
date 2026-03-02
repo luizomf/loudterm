@@ -67,9 +67,13 @@ def run() -> None:
     parser.add_argument(
         "-l",
         "--language",
-        choices=["a", "p"],
-        default="a",
-        help="The language",
+        help="The language code (e.g., 'a' for American English, 'p' for Portuguese).",
+    )
+
+    parser.add_argument(
+        "-v",
+        "--voice",
+        help="Specific voice to use (e.g., 'af_heart', 'pf_dora'). Overrides language default.",
     )
 
     args = parser.parse_args()
@@ -83,18 +87,43 @@ def run() -> None:
         print("Error: text missing. Use --help to see options.")
         sys.exit(1)
 
-    run_pipeline(args.language, text)
+    run_pipeline(args.language, text, args.voice)
 
 
-def run_pipeline(lang_code: str, text: str) -> None:
+def run_pipeline(
+    lang_code: str | None,
+    text: str,
+    voice_name: str | None = None,
+) -> None:
+    from loudterm.backend.kokoro82m.voices import KOKORO_VOICES
+
     sr = 24000  # sample rate
 
-    langs = {
-        "a": "af_heart",
-        "p": "pf_dora",
-    }
-
-    voice = langs[lang_code]
+    # If voice is provided, try to find its language code
+    if voice_name:
+        voice_key = f"@{voice_name}"
+        if voice_key in KOKORO_VOICES:
+            voice = voice_name
+            lang_code = KOKORO_VOICES[voice_key]["language_code"]
+        else:
+            print(f"Warning: Voice '{voice_name}' not found. Falling back to defaults.")
+            voice = "af_heart"
+            lang_code = lang_code or "a"
+    else:
+        # Fallback to language-based defaults
+        lang_code = lang_code or "a"
+        langs = {
+            "a": "af_heart",
+            "p": "pf_dora",
+            "b": "bf_emma",
+            "j": "jf_alpha",
+            "z": "zf_xiaoxiao",
+            "e": "ef_dora",
+            "f": "ff_siwis",
+            "h": "hf_alpha",
+            "i": "if_sara",
+        }
+        voice = langs.get(lang_code, "af_heart")
 
     with warnings.catch_warnings():
         warnings.filterwarnings(
