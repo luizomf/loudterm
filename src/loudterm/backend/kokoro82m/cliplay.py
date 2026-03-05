@@ -153,8 +153,8 @@ def run_pipeline(
             # print(_ps)
 
             audio_parts.append(audio)
-            output_file = OUTPUT_DIR / f"{voice}_{filename_ts}_part{i}.wav"
-            sf.write(output_file, audio, sr)  # type: ignore[reportUnknownMemberType]
+            # output_file = OUTPUT_DIR / f"{voice}_{filename_ts}_part{i}.wav"
+            # sf.write(output_file, audio, sr)  # type: ignore[reportUnknownMemberType]
 
             sd.play(audio, sr, blocking=True)  # type: ignore[reportUnknownMemberType]
 
