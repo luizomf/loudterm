@@ -168,6 +168,48 @@ Se estiver muito lento:
 
 ---
 
+## Uma observação importante: às vezes o "estranho" ajuda
+
+Tem um ponto curioso aqui: em alguns testes, a voz ficou **menos perfeita**, mas
+mais humana.
+
+Quando a mistura de vozes fica muito limpinha e muito coerente, o resultado pode
+continuar correto, só que ainda reto demais. Já quando você mistura mais vozes,
+inclusive vozes de idiomas diferentes, o timbre pode ganhar:
+
+- pequenas irregularidades
+- mudanças sutis de ritmo
+- subidas e descidas mais perceptíveis
+- um leve sotaque internacional
+
+Isso pode soar menos "puro", mas mais vivo.
+
+Em texto longo, principalmente briefing e leitura contínua, essa pequena
+estranheza às vezes ajuda mais do que atrapalha.
+
+### Exemplo de mistura mais expressiva
+
+Esse teste ficou mais estranho, com leve sotaque internacional em alguns
+trechos, mas também ficou com mais relevo na fala:
+
+```bash
+echo "$(cat ~/.local/share/omnews/briefings/2026-04-10-tts.md)" | \
+  cliplay -i - -l p \
+  -v 'pf_dora,pm_santa,if_sara,ff_siwis,af_bella,af_heart,ef_dora,af_aoede,bf_emma,af_heart,af_nicole,pm_santa,pm_alex'
+```
+
+Ou seja: se a meta for **expressividade**, não descarte uma mistura que ficou um
+pouco esquisita no timbre. Às vezes é justamente essa irregularidade que tira a
+voz daquele lugar reto e sem vida.
+
+### Regra prática
+
+- se você quer mais limpeza, use menos vozes
+- se você quer mais expressividade, aceite um pouco de estranheza
+- se a voz começou a parecer caricata demais, volte um passo
+
+---
+
 ## Próximo passo provável
 
 O próximo ganho grande provavelmente não vem de forçar mais fonema manual em
