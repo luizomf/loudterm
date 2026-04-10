@@ -71,6 +71,17 @@ ready!” message when loaded.
 
 Generated files live in `output/` as `<timestamp>_<voice>.wav`.
 
+## Kokoro Notes
+
+Tem uma nota prática e humana sobre Kokoro em
+[`docs/kokoro-notes.md`](./docs/kokoro-notes.md). Ela cobre:
+
+- como deixar a fala menos monótona
+- mistura de vozes
+- uso de `speed`
+- inspeção de tokens com `--show-tokens`
+- o que parece funcionar em inglês, mas não encaixa tão bem em PT-BR
+
 ## Development
 
 - Lint/type-check: `uv run ruff check .` and `uv run pyright`.

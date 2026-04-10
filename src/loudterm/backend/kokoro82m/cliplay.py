@@ -73,7 +73,25 @@ def run() -> None:
     parser.add_argument(
         "-v",
         "--voice",
-        help="Specific voice to use (e.g., 'af_heart', 'pf_dora'). Overrides language default.",
+        help=(
+            "Specific voice to use (e.g., 'af_heart', 'pf_dora'). "
+            "You can also mix voices with commas, for example "
+            "'pf_dora,pm_alex,af_bella'."
+        ),
+    )
+
+    parser.add_argument(
+        "-s",
+        "--speed",
+        type=float,
+        default=1.0,
+        help="Speech speed. Lower values usually sound less rushed (e.g., 0.9).",
+    )
+
+    parser.add_argument(
+        "--show-tokens",
+        action="store_true",
+        help="Print graphemes and phonemes for each generated chunk.",
     )
 
     args = parser.parse_args()
@@ -87,43 +105,89 @@ def run() -> None:
         print("Error: text missing. Use --help to see options.")
         sys.exit(1)
 
-    run_pipeline(args.language, text, args.voice)
+    run_pipeline(args.language, text, args.voice, args.speed, args.show_tokens)
+
+
+def _normalize_voice_names(voice_name: str) -> list[str]:
+    return [part.strip() for part in voice_name.split(",") if part.strip()]
+
+
+def _resolve_voice_and_lang(
+    lang_code: str | None,
+    voice_name: str | None,
+    available_voices: dict[str, dict[str, str]],
+) -> tuple[str, str]:
+    default_voices_by_lang = {
+        "a": "af_heart",
+        "p": "pf_dora",
+        "b": "bf_emma",
+        "j": "jf_alpha",
+        "z": "zf_xiaoxiao",
+        "e": "ef_dora",
+        "f": "ff_siwis",
+        "h": "hf_alpha",
+        "i": "if_sara",
+    }
+
+    if voice_name:
+        voice_parts = _normalize_voice_names(voice_name)
+        if not voice_parts:
+            raise ValueError("Voice list is empty.")
+
+        invalid_voices = [
+            part for part in voice_parts if f"@{part}" not in available_voices
+        ]
+        if invalid_voices:
+            invalid = ", ".join(invalid_voices)
+            raise ValueError(f"Unknown voice(s): {invalid}")
+
+        if not lang_code:
+            lang_code = available_voices[f"@{voice_parts[0]}"]["language_code"]
+
+        return lang_code, ",".join(voice_parts)
+
+    resolved_lang = lang_code or "a"
+    return resolved_lang, default_voices_by_lang.get(resolved_lang, "af_heart")
+
+
+def _iter_chunk_debug(
+    show_tokens: bool,
+    graphemes: str,
+    phonemes: str,
+) -> None:
+    if not show_tokens:
+        return
+
+    print(graphemes)
+    print("-" * 80)
+    print(phonemes)
+    print("-" * 80)
 
 
 def run_pipeline(
     lang_code: str | None,
     text: str,
     voice_name: str | None = None,
+    speed: float = 1.0,
+    show_tokens: bool = False,
 ) -> None:
     from loudterm.backend.kokoro82m.voices import KOKORO_VOICES
 
     sr = 24000  # sample rate
 
-    # If voice is provided, try to find its language code
-    if voice_name:
-        voice_key = f"@{voice_name}"
-        if voice_key in KOKORO_VOICES:
-            voice = voice_name
-            lang_code = KOKORO_VOICES[voice_key]["language_code"]
-        else:
-            print(f"Warning: Voice '{voice_name}' not found. Falling back to defaults.")
-            voice = "af_heart"
-            lang_code = lang_code or "a"
-    else:
-        # Fallback to language-based defaults
-        lang_code = lang_code or "a"
-        langs = {
-            "a": "af_heart",
-            "p": "pf_dora",
-            "b": "bf_emma",
-            "j": "jf_alpha",
-            "z": "zf_xiaoxiao",
-            "e": "ef_dora",
-            "f": "ff_siwis",
-            "h": "hf_alpha",
-            "i": "if_sara",
-        }
-        voice = langs.get(lang_code, "af_heart")
+    if speed <= 0:
+        print("Error: speed must be greater than 0.")
+        sys.exit(1)
+
+    try:
+        lang_code, voice = _resolve_voice_and_lang(
+            lang_code=lang_code,
+            voice_name=voice_name,
+            available_voices=KOKORO_VOICES,
+        )
+    except ValueError as exc:
+        print(f"Error: {exc}")
+        sys.exit(1)
 
     with warnings.catch_warnings():
         warnings.filterwarnings(
@@ -142,15 +206,17 @@ def run_pipeline(
         filename_ts = f"{time.time():.0f}"
 
         audio_parts: list[torch.Tensor] = []
-        generator = pipeline(text, voice=voice)
+        generator = pipeline(text, voice=voice, speed=speed)
 
-        for i, (_gs, _ps, audio) in enumerate(generator):
+        for i, (graphemes, phonemes, audio) in enumerate(generator):
             if not isinstance(audio, (torch.Tensor, torch.FloatTensor)):
                 continue
 
-            # print(_gs)
-            # print("-" * 80)
-            # print(_ps)
+            _iter_chunk_debug(
+                show_tokens=show_tokens,
+                graphemes=str(graphemes),
+                phonemes=str(phonemes),
+            )
 
             audio_parts.append(audio)
             # output_file = OUTPUT_DIR / f"{voice}_{filename_ts}_part{i}.wav"
