@@ -42,6 +42,7 @@ def make_bootom_toolbar(app_config: AppConfig) -> FormattedText:
 
 
 async def get_input(app_config: AppConfig) -> str | None:
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     history = FileHistory(OUTPUT_DIR / "text_history.txt")
 
     session: PromptSession[str] = PromptSession(
