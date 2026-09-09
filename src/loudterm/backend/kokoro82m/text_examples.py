@@ -40,9 +40,10 @@ que ele tem de melhor. Com tempo, ajustes e experimentos, a voz começa a \
 parecer menos uma máquina e mais alguém contando uma história.
 """
 
-# need:
-# uv add pyopenjtalk 'fugashi[unidic-lite]' jaconv mojimoji unidic
-# uv run -m unidic download
+# Japanese setup in this checkout:
+# uv sync --extra japanese
+# uv run --extra japanese -m unidic download
+# uv run --extra japanese loudterm
 japanese = """\
 このアイデアにはずっと取り組んでいて、時々ふと戻ってくるたびに、新しい発見があります。\
 小さな気づきの時もあれば、急に全体がつながって見える瞬間もあります。\

@@ -18,8 +18,12 @@ dependencies = [
   "pyopenjtalk>=0.4.1",          # japanese
   "fugashi[unidic-lite]>=1.5.2", # japanese
   "jaconv>=0.4.0",               # japanese
-  "mojimoji>=0.0.13",            # japanese
   "unidic>=1.1.0",               # japanese (need `uv run -m unidic download`)
+]
+
+[project.optional-dependencies]
+japanese = [
+  "mojimoji>=0.0.13", # Required by Misaki's Japanese tokenizer.
 ]
 
 [dependency-groups]

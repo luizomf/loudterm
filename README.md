@@ -22,7 +22,7 @@ stream audio, auto‑play, and auto‑save WAVs without leaving the terminal.
 - Audio deps: `sounddevice` (PortAudio) and `soundfile` (libsndfile). Install
   via your package manager if not provided by wheels.
 - First run downloads ~300 MB Kokoro weights from Hugging Face.
-- Optional (Japanese voices): `uv run -m unidic download` to fetch dictionaries.
+- Japanese voices require the `japanese` extra and a dictionary download (below).
 
 ## Installation
 
@@ -32,8 +32,9 @@ Using [uv](https://docs.astral.sh/uv/):
 uv python install 3.14
 uv python pin 3.14
 uv sync
-# Optional for Japanese voices
-uv run -m unidic download
+# Optional for Japanese voices (adds mojimoji)
+uv sync --extra japanese
+uv run --extra japanese -m unidic download
 ```
 
 With pip (slower to resolve extras):
@@ -46,13 +47,17 @@ python3.14 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -e .
-python -m unidic download  # only if you want Japanese voices
+# Optional for Japanese voices
+pip install -e '.[japanese]'
+python -m unidic download
 ```
 
 ## Running
 
 ```bash
 uv run loudterm
+# For Japanese voices, retain the extra when running:
+uv run --extra japanese loudterm
 # or
 python -m loudterm.cli
 ```
@@ -114,8 +119,11 @@ Tem uma nota prática e humana sobre Kokoro em
   `sd.default.device` environment vars.
 - Model download slow/fails → verify network access to Hugging Face; rerun after
   connectivity is stable.
-- Japanese voices raising tokenizer errors → run `uv run -m unidic download` (or
-  the pip equivalent) once.
+- Japanese voices raising tokenizer errors → install with `uv sync --extra japanese`,
+  run `uv run --extra japanese -m unidic download` once, then use
+  `uv run --extra japanese loudterm`. Default installs omit `mojimoji`, which
+  Misaki imports for Japanese; existing Japanese users must opt into the extra.
+  This extra only moves `mojimoji`, not all Japanese dependencies.
 
 ---
 
