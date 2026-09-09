@@ -62,13 +62,26 @@ uv run --extra japanese loudterm
 python -m loudterm.cli
 ```
 
+To run from another directory, use `uv run --project /absolute/path/to/loudterm loudterm`.
+For a reusable zsh shortcut, add this to `~/.zshrc` yourself (replace the path):
+
+```zsh
+alias loudterm='uv run --project /absolute/path/to/loudterm loudterm'
+```
+
+For Japanese voices, include `--extra japanese` before the final `loudterm`.
+This avoids changing your shell's working directory. Open a new terminal to
+load the alias.
+
 On first launch, wait for Kokoro weights to download; you’ll see a “Engine
 ready!” message when loaded.
 
 ## Usage
 
 - Type or paste text, then submit with `Meta+Enter` (Alt+Enter) or `Esc` then
-  `Enter`.
+  `Enter`. In macOS Terminal.app, enable **Settings → Profiles → Keyboard →
+  Use Option as Meta key** to use Option+Enter, or use Esc then Enter without
+  changing terminal settings.
 - Change voice/language inline: type `@` and use tab completion, e.g. `@pf_dora`
   (pt-BR), `@bf_emma` (en-GB), `@jf_alpha` (ja), `@zf_xiaoxiao` (zh).
 - Exit: `/exit`, `/quit`, `/q`, or `/bye`.
@@ -98,7 +111,7 @@ Tem uma nota prática e humana sobre Kokoro em
 ## Development
 
 - Lint/type-check: `uv run ruff check .` and `uv run pyright`.
-- Tests (none yet besides placeholder): `uv run pytest`.
+- Tests: `uv run pytest`.
 - Convenience with just:
   - `just run` — clear terminal and start loudterm.
   - `just setup` — install/pin Python 3.14 and sync deps.
