@@ -19,7 +19,7 @@ dependencies = [
   "pyopenjtalk>=0.4.1",          # japanese
   "fugashi[unidic-lite]>=1.5.2", # japanese
   "jaconv>=0.4.0",               # japanese
-  "unidic>=1.1.0",               # japanese (need `uv run -m unidic download`)
+  "unidic>=1.1.0",               # See README for Japanese extra/dictionary setup.
 ]
 
 [project.optional-dependencies]
