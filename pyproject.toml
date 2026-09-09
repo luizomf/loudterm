@@ -11,6 +11,7 @@ dependencies = [
   "soundfile>=0.12.1",
   "prompt_toolkit>=3.0.48",
   "kokoro>=0.9.4",
+  "transformers>=5.10.1", # Security floor for CVE-2026-9856 (via Kokoro).
   "ordered-set>=4.1.0",          # chinese
   "pypinyin>=0.55.0",            # chinese
   "cn2an>=0.5.23",               # chinese
