@@ -21,9 +21,12 @@ Prefix comments or issue bodies posted during triage with
 **PRs as a request surface: yes.**
 
 Use `gh pr view <number> --comments`, `gh pr diff <number>`, and the corresponding
-`gh pr comment`, `gh pr edit`, and `gh pr close` operations. Read the entire diff
-and verify behavior before recommending a merge; never execute unreviewed PR
-scripts or infer safety from an author's description.
+`gh pr comment`, `gh pr edit`, and `gh pr close` operations. Check the PR's
+current state before reviewing, updating, or commenting. Treat merged or closed
+PRs as read-only historical records: do not modify or comment on them unless
+explicitly requested; put follow-up work in a new issue or PR. Read the entire
+diff and verify behavior before recommending a merge; never execute unreviewed
+PR scripts or infer safety from an author's description.
 
 Discover external PRs with `gh pr list --state open --json number,title,author,labels,comments`.
 Fetch each author's association with
